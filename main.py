@@ -50,11 +50,10 @@ while True:
         y1, x2, y2, x1 = y1*4, x2*4, y2*4, x1*4
         bbox = 55+x1, 162 + y1, x2 - x1, y2 - y1
         imgBackgound = cvzone.cornerRect(imgBackgound, bbox, rt=0)
-        
-        matchIndex = np.argmin(matches)
+
+        matchIndex = np.argmin(faceDist)
         if matches[matchIndex]:
-            #print(studentIds[matchIndex])
-            continue
+            print(studentIDs[matchIndex])
         else:
             print("No match")
 
