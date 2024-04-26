@@ -41,7 +41,7 @@ while True:
     imgBackgound[44: 44 + 633, 808: 808 + 414] = imgPathList[0]
 
     for code, loc in zip(encodeCurFace, faceCurFrame):
-        matches = face_recognition.compare_faces(encodingList, code)
+        matches = face_recognition.compare_faces(encodingList, code, tolerance=0.50)
         faceDist = face_recognition.face_distance(encodingList, code)
         print(matches)
         print(faceDist)
@@ -51,11 +51,14 @@ while True:
         bbox = 55+x1, 162 + y1, x2 - x1, y2 - y1
         imgBackgound = cvzone.cornerRect(imgBackgound, bbox, rt=0)
 
+
         matchIndex = np.argmin(faceDist)
         if matches[matchIndex]:
-            print(studentIDs[matchIndex])
+            cv2.putText(imgBackgound, 'Welcome, ' + str(studentIDs[matchIndex]), (x1 + 10, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX,
+                    1, (0, 255, 0), 2)
         else:
-            print("No match")
+            cv2.putText(imgBackgound, 'No Match!', (x1 + 10, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX,
+                    1, (0, 0, 255), 2)
 
     cv2.imshow("Face Attendance", imgBackgound)
     cv2.waitKey(1)
