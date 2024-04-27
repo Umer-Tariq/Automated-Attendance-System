@@ -1,4 +1,3 @@
-import face_recognition 
 import cv2
 import dlib
 import cmake
@@ -6,7 +5,24 @@ import os
 import pickle 
 import numpy as np
 import cvzone
+import face_recognition 
 
+def get_id(list_of_ids):
+    d = dict()
+    for id in list_of_ids:
+        if id in d:
+            d[id] += 1
+        else:
+            d[id] = 0
+    
+    max = -1
+    id = -9999
+    for key in d.keys():
+        if d[key] > max:
+            max = d[key]
+            id = key
+    
+    return id
 
 cap = cv2.VideoCapture(0)
 cap.set(3, 640)
@@ -28,6 +44,9 @@ print(studentIDs)
 
 imgBackgound = cv2.imread('Resources/background.png')
 
+count = 0
+face_id_detected = []
+
 while True:
     success, img = cap.read()
 
@@ -40,25 +59,39 @@ while True:
     imgBackgound[162: 162 + 480, 55: 55 + 640] = img
     imgBackgound[44: 44 + 633, 808: 808 + 414] = imgPathList[0]
 
+    if len(faceCurFrame) == 0:  
+        count = 0
+        face_id_detected.clear()
     for code, loc in zip(encodeCurFace, faceCurFrame):
         matches = face_recognition.compare_faces(encodingList, code, tolerance=0.50)
         faceDist = face_recognition.face_distance(encodingList, code)
-        print(matches)
-        print(faceDist)
 
         y1, x2, y2, x1 = loc
         y1, x2, y2, x1 = y1*4, x2*4, y2*4, x1*4
         bbox = 55+x1, 162 + y1, x2 - x1, y2 - y1
         imgBackgound = cvzone.cornerRect(imgBackgound, bbox, rt=0)
-
+        print(count)
 
         matchIndex = np.argmin(faceDist)
         if matches[matchIndex]:
-            cv2.putText(imgBackgound, 'Welcome, ' + str(studentIDs[matchIndex]), (x1 + 10, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX,
+            face_id_detected.append(studentIDs[matchIndex])
+            if count == 10:
+                id_detected = get_id(face_id_detected)
+                cv2.putText(imgBackgound, 'Welcome, ' + str(id_detected), (x1, y1), cv2.FONT_HERSHEY_SIMPLEX,
                     1, (0, 255, 0), 2)
+                count = 0
+                face_id_detected.clear()
+            else:
+                count += 1
+                cv2.putText(imgBackgound, 'Identifying, ' + str(count), (x1 , y1), cv2.FONT_HERSHEY_SIMPLEX,
+                    1, (0, 255, 0), 2)
+
+
         else:
-            cv2.putText(imgBackgound, 'No Match!', (x1 + 10, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX,
+            cv2.putText(imgBackgound, 'No Match!', (x1 + 1, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX,
                     1, (0, 0, 255), 2)
+            count = 0
+            face_id_detected.clear()
 
     cv2.imshow("Face Attendance", imgBackgound)
     cv2.waitKey(1)
