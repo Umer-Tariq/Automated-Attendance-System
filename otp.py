@@ -16,10 +16,13 @@ def generate_string(length):
 
 def otp_msg(id):
   my_email = 'sendsystem8@gmail.com'
-  password_key = 'ydgw mibv qeon pzcn' 
+  password_key = 'ydgw mibv qeon pzcn'
   nu_server = "smtp.gmail.com"
   nu_port = 587
   id = id
+  parts = id.split('-')
+  recipient_email = parts[0] + parts[1] +'@nu.edu.pk'
+  print(recipient_email)
   code = generate_string(8)
   # HTML content with a bold heading and bigger font size
   html_content = f"""
@@ -40,7 +43,7 @@ def otp_msg(id):
   msg = MIMEMultipart()
   msg['Subject'] = 'Verification Code'
   msg['From'] = my_email
-  msg['To'] = 'saroshirfan786@gmail.com'  # Update with the recipient's email
+  msg['To'] = recipient_email  # Update with the recipient's email
 
   # Create a MIMEText object with the HTML content and attach it to the message
   body = MIMEText(html_content, 'html')
@@ -66,4 +69,4 @@ def otp_msg(id):
   print('code expired')
   return False
 
-otp_msg('K21-4878')
+otp_msg('K21-3261')
