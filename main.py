@@ -6,6 +6,10 @@ import pickle
 import numpy as np
 import cvzone
 import face_recognition 
+import time
+import threading
+ 
+
 
 def get_id(list_of_ids):
     d = dict()
@@ -23,6 +27,10 @@ def get_id(list_of_ids):
             id = key
     
     return id
+
+def saroshOTP_function():
+    time.sleep(5)
+    return True
 
 cap = cv2.VideoCapture(0)
 cap.set(3, 640)
@@ -45,6 +53,7 @@ print(studentIDs)
 imgBackgound = cv2.imread('Resources/background.png')
 
 count = 0
+count_mismatch = 0
 face_id_detected = []
 
 while True:
@@ -62,6 +71,7 @@ while True:
     if len(faceCurFrame) == 0:  
         count = 0
         face_id_detected.clear()
+        count_mismatch = 0
     for code, loc in zip(encodeCurFace, faceCurFrame):
         matches = face_recognition.compare_faces(encodingList, code, tolerance=0.50)
         faceDist = face_recognition.face_distance(encodingList, code)
@@ -74,8 +84,9 @@ while True:
 
         matchIndex = np.argmin(faceDist)
         if matches[matchIndex]:
+            count_mismatch = 0
             face_id_detected.append(studentIDs[matchIndex])
-            if count == 10:
+            if count == 5:
                 id_detected = get_id(face_id_detected)
                 cv2.putText(imgBackgound, 'Welcome, ' + str(id_detected), (x1, y1), cv2.FONT_HERSHEY_SIMPLEX,
                     1, (0, 255, 0), 2)
@@ -88,7 +99,18 @@ while True:
 
 
         else:
-            cv2.putText(imgBackgound, 'No Match!', (x1 + 1, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX,
+            if count_mismatch == 3:
+                if not saroshOTP_function():
+                    cv2.putText(imgBackgound, 'No Match!', (x1 + 1, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX,
+                    1, (0, 0, 255), 2)
+                else:
+                    cv2.putText(imgBackgound, 'Attendanc marked using OTP', (x1 + 1, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX,
+                    1, (0, 255, 255), 2)
+
+                count_mismatch = 0
+            else:
+                count_mismatch += 1
+                cv2.putText(imgBackgound, 'Identifying, ' + str(count_mismatch), (x1 , y1), cv2.FONT_HERSHEY_SIMPLEX,
                     1, (0, 0, 255), 2)
             count = 0
             face_id_detected.clear()
