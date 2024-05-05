@@ -8,8 +8,6 @@ import cvzone
 import face_recognition 
 import time
 import threading
- 
-
 
 def get_id(list_of_ids):
     d = dict()
@@ -55,6 +53,7 @@ imgBackgound = cv2.imread('Resources/background.png')
 count = 0
 count_mismatch = 0
 face_id_detected = []
+otp_thread = None
 
 while True:
     success, img = cap.read()
@@ -100,11 +99,13 @@ while True:
 
         else:
             if count_mismatch == 3:
-                if not saroshOTP_function():
-                    cv2.putText(imgBackgound, 'No Match!', (x1 + 1, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX,
+                cv2.putText(imgBackgound, 'No Match! Kindly Mark your attendance using OTP', (x1 + 1, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX,
                     1, (0, 0, 255), 2)
+                if otp_thread is None or not otp_thread.is_alive():
+                    otp_thread = threading.Thread(target=saroshOTP_function)
+                    otp_thread.start()
                 else:
-                    cv2.putText(imgBackgound, 'Attendanc marked using OTP', (x1 + 1, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX,
+                    cv2.putText(imgBackgound, 'Attendance marked using OTP', (x1 + 1, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX,
                     1, (0, 255, 255), 2)
 
                 count_mismatch = 0
