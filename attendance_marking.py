@@ -118,7 +118,21 @@ def extract_row_or_col(col_reference, option):
         wb[cell_num] = status
     wb.save(file_name)
 '''
-
+'''def find_colreference2(file_name):
+    current_time_12hr = datetime.datetime.now().strftime('%I:%M %p')
+    current_hour = current_time_12hr.split(':')[0] 
+    if(current_hour[0] == '0'):
+        curr = ''
+        for i in range(0, len(current_hour)):
+            if current_hour[i] != '0':
+                break
+            else:
+                curr = current_hour[i + 1:len(current_hour)]
+        current_hour = curr
+    var = datetime.datetime.now().strftime('%Y-%m-%d') + ' ' + 'status'
+    coordinates = find_cell_num('6K_CS-4002.xlsx', var)
+    col2_reference = extract_row_or_col(coordinates, 1)
+'''
 
 def mark_attendance(file_name):
     df = pd.read_excel('6K_CS-4002.xlsx')
@@ -194,8 +208,5 @@ def prepare_file(sec, ccode):
 section, subject, ccode =  read_file('R11')
 prepare_file(section, ccode)
 #mark_attendance('ccc')
-
-
-
 
 
