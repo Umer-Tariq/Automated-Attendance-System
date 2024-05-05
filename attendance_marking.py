@@ -20,6 +20,8 @@ def get_excel_cell(row, col):
     cell_ref = f"{col_letters}{row_number}"
     return cell_ref
 
+attendance = {}
+
 def read_file(room):
     wb = openpyxl.load_workbook('timetable.xlsx')
     current_day_name = datetime.datetime.now().strftime('%A')
@@ -93,6 +95,31 @@ def extract_row_or_col(col_reference, option):
     else:
         return crow
 
+'''def mark(id, file_name, col2_reference):
+
+    cell_location = find_cell_num('6K_CS-4002.xlsx',id )
+    row_number = extract_row_or_col(cell_location, 0)
+    record_time = datetime.datetime.now().strftime('%I:%M %p')
+    record_mins = record_time.split(':')[1].split(' ')[0]
+    cell_num2 = col2_reference + row_number
+    if( record_mins <= 15 ):
+        status = 'Present'
+    elif( record_mins > 15 and record_mins <= 30 ):
+        status = 'Late'
+    else:
+        status = 'Absent'
+    attendance[cell_num2] = status 
+'''
+
+'''def save_file(file_name):
+    wb = openpyxl.load_workbook(file_name)
+    sheet = wb.active
+    for cell_num, status in attendance.items():
+        wb[cell_num] = status
+    wb.save(file_name)
+'''
+
+
 def mark_attendance(file_name):
     df = pd.read_excel('6K_CS-4002.xlsx')
     print(df)
@@ -109,10 +136,6 @@ def mark_attendance(file_name):
             else:
                 curr = current_hour[i + 1:len(current_hour)]
         current_hour = curr
-    var = datetime.datetime.now().strftime('%Y-%m-%d') + ' ' + 'time'
-    print(var)
-    coordinates = find_cell_num('6K_CS-4002.xlsx', var)
-    col_reference = extract_row_or_col(coordinates, 1)
     var = datetime.datetime.now().strftime('%Y-%m-%d') + ' ' + 'status'
     coordinates = find_cell_num('6K_CS-4002.xlsx', var)
     col2_reference = extract_row_or_col(coordinates, 1)
@@ -130,9 +153,8 @@ def mark_attendance(file_name):
             if scanned_status:
                 row_number = extract_row_or_col(cell_location, 0)
                 print("Cell reference:", cell_location)
-                cell_num1 = col_reference + row_number
                 cell_num2 = col2_reference + row_number
-                print('Attendance Marked! ' + str(value_to_find)  + '   pos =  ' +  str(cell_num1) )
+                print('Attendance Marked! ' + str(value_to_find)  + '   pos =  ' +  str(cell_num2) )
                 ''''wb = openpyxl.load_workbook('6K_CS-4002.xlsx')
                 sheet = wb.active
                 record_time = datetime.datetime.now().strftime('%I:%M %p')
@@ -143,8 +165,7 @@ def mark_attendance(file_name):
                     status = 'Late'
                 else:
                     status = 'Absent'
-                wb[cell_num1] = record_time
-                wb[cell_num1] = status
+                wb[cell_num2] = status
                 wb.save('6K_CS-4002.xlsx')'''
                 break
             else:
@@ -164,19 +185,17 @@ def prepare_file(sec, ccode):
     last_column_letter = get_column_letter(last_column_number)
     time_cell_number = last_column_letter + '1'
     status_cell_number = get_column_letter(last_column_number + 1) + '1'
-    today_date_time = datetime.datetime.now().strftime('%Y-%m-%d') + ' ' + 'time'
-    sheet[time_cell_number] = today_date_time
-    print(time_cell_number)
-    last_column_number = sheet.max_column + 1
-    last_column_letter = get_column_letter(last_column_number)
-    time_cell_number = last_column_letter + '1'
     today_date_time = datetime.datetime.now().strftime('%Y-%m-%d') + ' ' + 'status'
     sheet[time_cell_number] = today_date_time
+    print(time_cell_number)
     wb.save(file_name)
     mark_attendance(file_name)
 
-#section, subject, ccode =  read_file('R11')
-#prepare_file(section, ccode)
-mark_attendance('ccc')
+section, subject, ccode =  read_file('R11')
+prepare_file(section, ccode)
+#mark_attendance('ccc')
+
+
+
 
 
