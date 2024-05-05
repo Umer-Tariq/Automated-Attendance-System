@@ -30,6 +30,14 @@ def saroshOTP_function():
     time.sleep(5)
     return True
 
+def markattendace():
+    pass
+
+def sendEmail():
+    pass
+
+
+
 cap = cv2.VideoCapture(0)
 cap.set(3, 640)
 cap.set(4, 480)
@@ -53,7 +61,10 @@ imgBackgound = cv2.imread('Resources/background.png')
 count = 0
 count_mismatch = 0
 face_id_detected = []
+#thread used to call the OTP function
 otp_thread = None
+
+##open excel file here
 
 while True:
     success, img = cap.read()
@@ -89,6 +100,8 @@ while True:
                 id_detected = get_id(face_id_detected)
                 cv2.putText(imgBackgound, 'Welcome, ' + str(id_detected), (x1, y1), cv2.FONT_HERSHEY_SIMPLEX,
                     1, (0, 255, 0), 2)
+                ##the prson has been detected. So nark their attendance
+                ##call the func markAttendance(id_detected)
                 count = 0
                 face_id_detected.clear()
             else:
@@ -101,6 +114,7 @@ while True:
             if count_mismatch == 3:
                 cv2.putText(imgBackgound, 'No Match! Kindly Mark your attendance using OTP', (x1 + 1, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX,
                     1, (0, 0, 255), 2)
+                ##OTP Function called here target=functionName 
                 if otp_thread is None or not otp_thread.is_alive():
                     otp_thread = threading.Thread(target=saroshOTP_function)
                     otp_thread.start()
@@ -118,3 +132,6 @@ while True:
 
     cv2.imshow("Face Attendance", imgBackgound)
     cv2.waitKey(1)
+
+##close excel sheet
+##send email
