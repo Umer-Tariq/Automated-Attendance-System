@@ -14,12 +14,12 @@ def generate_string(length):
 
   return verif_code
 
-def otp_msg(id):
+def otp_msg():
   my_email = 'sendsystem8@gmail.com'
   password_key = 'ydgw mibv qeon pzcn'
   nu_server = "smtp.gmail.com"
   nu_port = 587
-  id = id
+  id = input(print('Enter your id for otp : '))
   parts = id.split('-')
   recipient_email = parts[0] + parts[1] +'@nu.edu.pk'
   print(recipient_email)
@@ -69,4 +69,3 @@ def otp_msg(id):
   print('code expired')
   return False
 
-otp_msg('K21-3261')

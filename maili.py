@@ -14,7 +14,7 @@ def send_copy(file_name):
     msg['From'] = my_email
     msg['To'] = 'saroshirfan786@gmail.com'  # Update with the recipient's email
     
-    with open(excel_file_path, 'rb') as file:
+    with open(file_name, 'rb') as file:
         excel_attachment = MIMEApplication(file.read())
     
     excel_attachment.add_header('Content-Disposition', 'attachment', filename=file_name)

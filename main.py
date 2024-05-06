@@ -8,6 +8,10 @@ import cvzone
 import face_recognition 
 import time
 import threading
+import datetime
+from maili import send_copy
+from otp import otp_msg
+from attendance_marking import read_file, prepare_file, mark, find_colreference2, save_file
 
 def get_id(list_of_ids):
     d = dict()
@@ -26,17 +30,7 @@ def get_id(list_of_ids):
     
     return id
 
-def saroshOTP_function():
-    time.sleep(5)
-    return True
-
-def markattendace():
-    pass
-
-def sendEmail():
-    pass
-
-
+attendance = {}
 
 cap = cv2.VideoCapture(0)
 cap.set(3, 640)
@@ -65,8 +59,15 @@ face_id_detected = []
 otp_thread = None
 
 ##open excel file here
+current_time_12hr = datetime.datetime.now().strftime('%I:%M %p')
+current_min = current_time_12hr.split(':')[1] 
+current_min = int(current_min.split(' ')[0])
 
-while True:
+section, subject, ccode =  read_file('R11')
+file_name = prepare_file(section, ccode)
+col_num = find_colreference2(file_name)
+
+while current_min < 55:
     success, img = cap.read()
 
     imgS = cv2.resize(img, (0, 0), None, 0.25, 0.25)
@@ -101,7 +102,7 @@ while True:
                 cv2.putText(imgBackgound, 'Welcome, ' + str(id_detected), (x1, y1), cv2.FONT_HERSHEY_SIMPLEX,
                     1, (0, 255, 0), 2)
                 ##the prson has been detected. So nark their attendance
-                ##call the func markAttendance(id_detected)
+                mark(id_detected, file_name, col_num)
                 count = 0
                 face_id_detected.clear()
             else:
@@ -116,7 +117,7 @@ while True:
                     1, (0, 0, 255), 2)
                 ##OTP Function called here target=functionName 
                 if otp_thread is None or not otp_thread.is_alive():
-                    otp_thread = threading.Thread(target=saroshOTP_function)
+                    otp_thread = threading.Thread(target=otp_msg)
                     otp_thread.start()
                 else:
                     cv2.putText(imgBackgound, 'Attendance marked using OTP', (x1 + 1, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX,
@@ -134,4 +135,6 @@ while True:
     cv2.waitKey(1)
 
 ##close excel sheet
+save_file(file_name)
 ##send email
+send_copy(file_name)

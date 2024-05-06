@@ -64,8 +64,10 @@ def read_file(room):
     for i in column_values:
 
         if room in i:
-           item = i 
+           item = i
+    print(item) 
     parts = item.split(' ')
+    print(parts)
     return parts[1].split('-')[1], parts[2], parts[3]
 
 def find_cell_num( file_name, var ):
@@ -95,7 +97,7 @@ def extract_row_or_col(col_reference, option):
     else:
         return crow
 
-'''def mark(id, file_name, col2_reference):
+def mark(id, file_name, col2_reference):
 
     cell_location = find_cell_num('6K_CS-4002.xlsx',id )
     row_number = extract_row_or_col(cell_location, 0)
@@ -109,16 +111,16 @@ def extract_row_or_col(col_reference, option):
     else:
         status = 'Absent'
     attendance[cell_num2] = status 
-'''
 
-'''def save_file(file_name):
+
+def save_file(file_name):
     wb = openpyxl.load_workbook(file_name)
     sheet = wb.active
     for cell_num, status in attendance.items():
         wb[cell_num] = status
     wb.save(file_name)
-'''
-'''def find_colreference2(file_name):
+
+def find_colreference2(file_name):
     current_time_12hr = datetime.datetime.now().strftime('%I:%M %p')
     current_hour = current_time_12hr.split(':')[0] 
     if(current_hour[0] == '0'):
@@ -132,7 +134,7 @@ def extract_row_or_col(col_reference, option):
     var = datetime.datetime.now().strftime('%Y-%m-%d') + ' ' + 'status'
     coordinates = find_cell_num('6K_CS-4002.xlsx', var)
     col2_reference = extract_row_or_col(coordinates, 1)
-'''
+
 
 def mark_attendance(file_name):
     df = pd.read_excel('6K_CS-4002.xlsx')
@@ -203,10 +205,10 @@ def prepare_file(sec, ccode):
     sheet[time_cell_number] = today_date_time
     print(time_cell_number)
     wb.save(file_name)
-    mark_attendance(file_name)
+    return file_name
 
-section, subject, ccode =  read_file('R11')
-prepare_file(section, ccode)
+#section, subject, ccode =  read_file('R11')
+#prepare_file(section, ccode)
 #mark_attendance('ccc')
 
 
