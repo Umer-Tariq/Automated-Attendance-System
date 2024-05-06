@@ -1,32 +1,30 @@
-import smtplib 
-from email.mime.text import MIMEText 
-from email.mime.multipart import MIMEMultipart 
-import os
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.application import MIMEApplication
 
-my_email='saroshirfan786@gmai.com'
-password_key='F@st4878!'
-
-# SMTP Server and port no for GMAIL.com
-nu_server= "smtp.gmail.com"
-nu_port= 587
-
-# Starting connection
-my_server = smtplib.SMTP(nu_server, nu_port)
-my_server.ehlo()
-my_server.starttls()
+def send_copy(file_name):
+    my_email = 'sendsystem8@gmail.com'
+    password_key = 'ydgw mibv qeon pzcn'  # Update with your actual password
+    nu_server = "smtp.gmail.com"
+    nu_port = 587
     
-# Login with your email and password
-my_server.login(my_email, password_key)
+    # Create a MIME multipart message
+    msg = MIMEMultipart()
+    msg['Subject'] = 'Sending Excel File'
+    msg['From'] = my_email
+    msg['To'] = 'saroshirfan786@gmail.com'  # Update with the recipient's email
+    
+    with open(excel_file_path, 'rb') as file:
+        excel_attachment = MIMEApplication(file.read())
+    
+    excel_attachment.add_header('Content-Disposition', 'attachment', filename=file_name)
+    msg.attach(excel_attachment)
+    
+    # Establish connection with the SMTP server
+    with smtplib.SMTP(nu_server, nu_port) as my_server:
+        my_server.ehlo()
+        my_server.starttls()
+        my_server.login(my_email, password_key)
+        my_server.send_message(msg)
 
-
-msg = MIMEMultipart() 
-msg['Subject'] = '123hahaha' 
-msg.attach(MIMEText('Hello from sarosh'))
-
-my_server.sendmail(
-            from_addr= my_email,
-            to_addrs='umer.tariq3261@gmail.com',
-            msg=msg
-        )
-
-my_server.quit()
+    print('Attendance sent successfully!')
