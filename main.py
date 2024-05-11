@@ -44,6 +44,7 @@ def exit_handler(signal, frame):
 signal.signal(signal.SIGINT, exit_handler)
 attendance = {}
 root = tk.Tk()
+#video by hamza's workshop
 cap = cv2.VideoCapture(0)
 cap.set(3, 640)
 cap.set(4, 480)
@@ -113,6 +114,7 @@ try:
                 count_mismatch = 0
                 face_id_detected.append(studentIDs[matchIndex])
                 if count == 5:
+                    #FACE IS RECOGNIZED AND THE ATTENDANCE IS MARKED STATUS: YOUR ATTENDACE HAS BEEN MARKED
                     id_detected = get_id(face_id_detected)
                     cv2.putText(imgBackgound, 'Welcome, ' + str(id_detected), (x1, y1), cv2.FONT_HERSHEY_SIMPLEX,
                         1, (0, 255, 0), 2)
@@ -129,6 +131,7 @@ try:
 
             else:
                 if count_mismatch == 3:
+                    #THE PERSON IS NOT RECOGNIZED STATUS: NO MATCH! PLEASE USE OTP TO MARK YOUR ATTENDANCE
                     cv2.putText(imgBackgound, 'No Match! Kindly Mark your attendance using OTP', (x1 + 1, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX,
                         1, (0, 0, 255), 2)
                     ##OTP Function called here target=functionName 
@@ -138,6 +141,7 @@ try:
                     '''
                     
                     root.withdraw()
+                    #OTP MSG IS THE OTP FUNCTION
                     otp_returned = otp_msg()
                     if otp_returned != False:
                     #else:

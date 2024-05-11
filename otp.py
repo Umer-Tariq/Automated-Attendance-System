@@ -23,6 +23,8 @@ def otp_msg():
 
   flag = 0
   while flag == 0 :
+    #INPUT YOUR ID VIA THE STATUS
+    #OTP SENT SUCCESSFULLY
     id = simpledialog.askstring("Input", "Enter your ID:")
     if id[3] != '-' or id[0] !='K' or len(id) != 8 or (int(id[1:3]) <= 20 and int(id[1:3]) > 24) or (int(id[4:8] )<=1000 and int(id[4:8] ) >= 5000): 
       print("Incorrect format! Please enter in form 21K-XXXX")
@@ -72,12 +74,15 @@ def otp_msg():
   entered_code = ''
   start_time = time.time()
   while time.time() - start_time < 20 and len(entered_code ) <= 0:
+    #PLEASE ENTER YOUR OTP
     entered_code = simpledialog.askstring("Input", "Enter OTP:")
     if entered_code == code:
+      #YOUR ATTENDANCE HAS BEEN MARKED USING OTP
       print('verifing...')
       id_new = id[1] + id[2] + id[0] + id[3:8]
       return id_new
     else:
+      #INCORRECT OTP: YOUR ATTENDANCE IS NOT MARKED
       print('code expired')
       return False
 
