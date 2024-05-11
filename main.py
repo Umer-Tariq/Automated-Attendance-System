@@ -80,7 +80,7 @@ file_name = prepare_file(section, ccode)
 col_num = find_colreference2(file_name)
 
 try:
-    while current_min < 9:
+    while current_min < 55:
         current_time_12hr = datetime.datetime.now().strftime('%I:%M %p')
         current_min = current_time_12hr.split(':')[1] 
         current_min = int(current_min.split(' ')[0])
