@@ -1,18 +1,20 @@
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
+import datetime
 
-def send_copy(file_name):
+def send_copy(file_name, section, subject):
     my_email = 'sendsystem8@gmail.com'
     password_key = 'ydgw mibv qeon pzcn'  # Update with your actual password
     nu_server = "smtp.gmail.com"
     nu_port = 587
     
+    formatted_date = datetime.date.today()
     # Create a MIME multipart message
     msg = MIMEMultipart()
-    msg['Subject'] = 'Sending Excel File'
+    msg['Subject'] = section + ' ' + subject + 'attendance for ' + str(formatted_date) 
     msg['From'] = my_email
-    msg['To'] = 'saroshirfan786@gmail.com'  # Update with the recipient's email
+    msg['To'] = 'saroshirfan786@gmail.com'  # considering as teacher's email
     
     with open(file_name, 'rb') as file:
         excel_attachment = MIMEApplication(file.read())

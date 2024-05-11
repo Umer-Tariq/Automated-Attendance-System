@@ -5,6 +5,7 @@ from email.mime.multipart import MIMEMultipart
 import random
 import string
 import time
+from tkinter import simpledialog
 
 def generate_string(length):
   list = string.ascii_lowercase + string.ascii_uppercase + string.punctuation + string.digits
@@ -19,7 +20,17 @@ def otp_msg():
   password_key = 'ydgw mibv qeon pzcn'
   nu_server = "smtp.gmail.com"
   nu_port = 587
-  id = input(print('Enter your id for otp : '))
+
+  flag = 0
+  while flag == 0 :
+    id = simpledialog.askstring("Input", "Enter your ID:")
+    if id[3] != '-' or id[0] !='K' or len(id) != 8 or (int(id[1:3]) <= 20 and int(id[1:3]) > 24) or (int(id[4:8] )<=1000 and int(id[4:8] ) >= 5000): 
+      print("Incorrect format! Please enter in form 21K-XXXX")
+      print( )
+      flag = 0
+    else :
+      flag = 1
+
   parts = id.split('-')
   recipient_email = parts[0] + parts[1] +'@nu.edu.pk'
   print(recipient_email)
@@ -61,11 +72,12 @@ def otp_msg():
   entered_code = ''
   start_time = time.time()
   while time.time() - start_time < 20 and len(entered_code ) <= 0:
-    entered_code = input(print("Enter Verification Code here : "))
-    if entered_code == code and time.time() - start_time < 20:
+    entered_code = simpledialog.askstring("Input", "Enter OTP:")
+    if entered_code == code:
       print('verifing...')
-      return True
-
-  print('code expired')
-  return False
+      id_new = id[1] + id[2] + id[0] + id[3:8]
+      return id_new
+    else:
+      print('code expired')
+      return False
 
