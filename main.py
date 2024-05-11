@@ -32,16 +32,7 @@ def get_id(list_of_ids):
             id = key
     
     return id
-def exit_handler(signal, frame):
-    print("Exiting program...")
 
-    save_file(file_name)
-    send_copy(file_name, section, subject)
-
-    exit(0)
-
-# Register the signal handler for the exit signal
-signal.signal(signal.SIGINT, exit_handler)
 attendance = {}
 root = tk.Tk()
 #video by hamza's workshop
@@ -168,8 +159,3 @@ try:
     send_copy(file_name, section, subject)
 except Exception as e:
     print("Keyboard interrupt detected. Sending email copy...")
-finally:
-    print("Keyboard interrupt detected. Sending email copy...")
-    save_file(file_name)
-    ##send email
-    send_copy(file_name, section, subject)

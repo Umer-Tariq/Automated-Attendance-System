@@ -8,7 +8,7 @@ import time
 from tkinter import simpledialog
 
 def generate_string(length):
-  list = string.ascii_lowercase + string.ascii_uppercase + string.punctuation + string.digits
+  list = string.ascii_lowercase + string.ascii_uppercase + string.digits
   verif_code = ''
   for i in range(0, length):
     verif_code += str(random.choice(list))
