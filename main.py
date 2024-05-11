@@ -146,7 +146,7 @@ try:
                     count_mismatch = 0
                 else:
                     count_mismatch += 1
-                    cv2.putText(imgBackgound, 'Identifying, ' + str(count_mismatch), (x1 , y1), cv2.FONT_HERSHEY_SIMPLEX,
+                    cv2.putText(imgBackgound, 'Unable to recognize, ' + str(count_mismatch), (x1 , y1), cv2.FONT_HERSHEY_SIMPLEX,
                         1, (0, 0, 255), 2)
                 count = 0
                 face_id_detected.clear()
