@@ -38,6 +38,7 @@ def get_id(list_of_ids):
 def display_message(message):
     message_label.config(text=message)
 
+Lis = []
 
 attendance = {}
 root = tk.Tk()
@@ -119,8 +120,12 @@ while current_min < 59:
                 id_detected = get_id(face_id_detected)
                 display_message("Welcome! Attendance Marked")
                 ##the prson has been detected. So nark their attendance
-                mark(id_detected, file_name, col_num)
-                save_file(file_name)
+                if id_detected in Lis:
+                    display_message("Attendance alread marked!")
+                else:
+                    Lis.append(id_detected)
+                    mark(id_detected, file_name, col_num)
+                    save_file(file_name)
                 count = 0
                 face_id_detected.clear()
             else:
@@ -142,13 +147,18 @@ while current_min < 59:
                 root2.withdraw()
                 #OTP MSG IS THE OTP FUNCTION
                 if reply:
-                    otp_returned = otp_msg()
-                    if otp_returned != False:
+                    otp_returned = otp_msg(Lis)
+                    if otp_returned != False and otp_returned != 101:
                         display_message("Attendance Marked using OTP")
                         mark(otp_returned, file_name, col_num)
                         save_file(file_name)
+                        Lis.append(otp_returned)
                         count = 0
                         face_id_detected.clear()
+                        
+                    elif otp_returned != 101:
+                        display_message("Attendance alread marked!")
+                        
                 else:
                     continue
 
