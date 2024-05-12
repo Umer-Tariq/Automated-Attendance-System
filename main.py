@@ -145,12 +145,16 @@ while current_min < 59:
                 #OTP MSG IS THE OTP FUNCTION
                 if reply:
                     otp_returned = otp_msg(attendance)
-                    if otp_returned != False:
+                    if otp_returned != False and otp_returned != 101:
                         display_message("Attendance Marked using OTP")
                         mark(otp_returned, file_name, col_num)
                         save_file(file_name)
                         count = 0
                         face_id_detected.clear()
+                        
+                    elif otp_returned == 101:
+                        display_message("Attendance Is Already Marked")
+                        
                 else:
                     continue
 
