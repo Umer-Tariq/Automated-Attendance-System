@@ -34,7 +34,7 @@ def otp_msg(attendance):
       flag = 1
   id_new = id[1] + id[2] + id[0] + id[3:8]
   if id_new in attendance:
-    print('attendance alreadi marked')
+    return 101
   else:
     parts = id.split('-'id_new = id[1] + id[2] + id[0] + id[3:8])
     recipient_email = parts[0] + parts[1] +'@nu.edu.pk'
