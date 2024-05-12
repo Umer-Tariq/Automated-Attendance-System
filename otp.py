@@ -15,7 +15,7 @@ def generate_string(length):
 
   return verif_code
 
-def otp_msg():
+def otp_msg(Lis):
   my_email = 'sendsystem8@gmail.com'
   password_key = 'ydgw mibv qeon pzcn'
   nu_server = "smtp.gmail.com"
@@ -32,7 +32,10 @@ def otp_msg():
       flag = 0
     else :
       flag = 1
-  parts = id.split('-'id_new = id[1] + id[2] + id[0] + id[3:8])
+  id_new = id[1] + id[2] + id[0] + id[3:8]
+  if id_new in Lis:
+    return 101
+  parts = id.split('-')
   recipient_email = parts[0] + parts[1] +'@nu.edu.pk'
   print(recipient_email)
   code = generate_string(8)
@@ -78,6 +81,7 @@ def otp_msg():
     if entered_code == code:
       #YOUR ATTENDANCE HAS BEEN MARKED USING OTP
       print('verifing...')
+      Lis.append(id_new)
       return id_new
     else:
       #INCORRECT OTP: YOUR ATTENDANCE IS NOT MARKED
